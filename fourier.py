@@ -24,7 +24,7 @@ def plotar():
     fig, ax = plt.subplots(figsize=tamanho)
     t = np.linspace(-1, 1, 100, dtype=np.float64)
     y = fourier(x=t, termos=termos, k=ganho)
-    ax.plot(t, y, "b.")
+    ax.plot(t, y, "b.-")
     ax.set_aspect('auto')
     pyscript.write("plote", fig)
 plotar()
