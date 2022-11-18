@@ -10,8 +10,9 @@
     
     <style>
 .sliderContainer {
-  min-width: 50%;
-  max-width: 75%;
+  min-width: fit-content;
+  max-width: 100%;
+  width: 50%;
   flex: 1;
   align-items: stretch;
   display: flex;
@@ -34,7 +35,7 @@
 }
 
 .slider::-webkit-slider-thumb {
-  min-width: fit-content;
+  min-width: 1em;
   -webkit-appearance: none; 
   appearance: none;
   background: #04AA6D; /* Green background */
@@ -43,7 +44,7 @@
 }
 
 .slider::-moz-range-thumb {
-  min-width: fit-content;
+  min-width: 1em;
   background: #04AA6D; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
