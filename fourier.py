@@ -11,7 +11,6 @@ def plotar():
     tela = document.getElementById("bode")
     px = 1/plt.rcParams['figure.dpi']
     tamanho = (int(window.innerHeight*px*3/4), int(window.innerHeight*px*3/4))
-    print(tamanho)
     
     def fourier(x:np.float64, termos:int =1, k:int =1):
         res = 0
@@ -26,6 +25,6 @@ def plotar():
     y = fourier(x=t, termos=termos, k=ganho)
     ax.plot(t, y, "b.-")
     ax.set_aspect('auto')
-    pyscript.write("plote", fig)
+    Element("plote").write(fig)
 plotar()
 document.getElementById("bode").style.visibility = "visible"
