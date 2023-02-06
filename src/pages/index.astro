@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+const paginas = await Astro.glob('/src/pages/*.{md,astro}');
+const maracujá = import.meta.glob('/src/pages/*.html');
+for (const path in maracujá) {
+	console.log(path, maracujá[path])
+	paginas.push({"url": path.substring(11), "name":path.substring(11, path.length-5)})
+	
+}
+---
+
+<Layout title="Oie">
+	<main>
+		<h1>Agora com Astro.</h1>
+		<h2>E uma <span class="text-gradient">preguiça</span> grande demais para montar um index</h2>
+		<p class="instructions">
+			Aqui eu pretendo listar o <code>src/pages</code> de algum jeito.<br />
+			<strong>Code Challenge:</strong> Entender como faço isso sem .glob() ou getStaticPaths().
+		</p>
+		<ul role="list" class="link-card-grid">
+			<Card
+				href="fourierExemplo.html"
+				title="Exemplo fourier"
+				body="Plot interativo de uma série de Fourier de um degrau."
+			/>
+			<Card
+				href="./"
+				title="Index"
+				body="AQUI MESMO"
+			/>
+			{
+			paginas.map(
+				pagina => 
+					<Card
+						href={pagina.url}
+						title={pagina.name}
+						body={pagina.path}
+					/>
+			)
+
+			}
+			
+
+		</ul>
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1.5rem;
+		max-width: 60ch;
+	}
+	h1 {
+		font-size: 3rem;
+		font-weight: 800;
+		margin: 0;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	.instructions {
+		line-height: 1.6;
+		margin: 1rem 0;
+		border: 1px solid rgba(var(--accent), 25%);
+		background-color: white;
+		padding: 1rem;
+		border-radius: 0.4rem;
+	}
+	.instructions code {
+		font-size: 0.875em;
+		font-weight: bold;
+		background: rgba(var(--accent), 12%);
+		color: rgb(var(--accent));
+		border-radius: 4px;
+		padding: 0.3em 0.45em;
+	}
+	.instructions strong {
+		color: rgb(var(--accent));
+	}
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 1rem;
+		padding: 0;
+	}
+</style>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    
+    <style>
+.sliderContainer {
+  min-width: fit-content;
+  max-width: 100%;
+  width: 50%;
+  flex: 1;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+.slider {
+  
+  -webkit-appearance: none; 
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 2vh;
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  display: block;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  appearance: none;
+  height: 2vh;
+  aspect-ratio: 1/1;
+  border: 1px black;
+  background: #04AA6D; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+
+}
+
+.slider::-moz-range-thumb {
+  min-width: 10%;
+  height: 100%;
+  background: #04AA6D; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+body {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    visibility: hidden;
+    flex-wrap: wrap;
+}
+
+#plote {
+    max-width: 100%;
+}
+#plote > * {
+    max-width: 100%
+}
+    </style>
+</head>
+
+<body id="bode">
+    
+    <py-config type="json">
+        {
+        "packages": ["numpy", "matplotlib"],
+        "fetch": [{
+            "files":  ["./fourier.py"]
+                }]
+        }
+    </py-config>
+
+    <div id="plote"></div>
+
+    <div id="variaveis" class="sliderContainer">
+        <label>Número de termos:</label>
+        <input type="range" min="1" max="100" value="1" id="termos" py-change="plotar()" class="slider">
+        <label id="valTermo">1</label>
+        <label>Ganho:</label>
+        <input type="range" min="1" max="5" value="1" id="ganho" py-change="plotar()" class="slider">
+        <label id="valGanho">1</label>
+    </div>
+
+    <py-script src="./fourier.py">
+    </py-script>
+</body>
+</html>
