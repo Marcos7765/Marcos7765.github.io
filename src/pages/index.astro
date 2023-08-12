@@ -1,29 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
-const paginas = await Astro.glob('/src/pages/*.{md,astro}');
-const maracujá = import.meta.glob('/src/pages/*.html');
-for (const path in maracujá) {
-	console.log(path, maracujá[path])
-	paginas.push({"url": path.substring(11), "name":path.substring(11, path.length-5)})
+import fs from 'node:fs/promises';
+import Path from 'path';
+import * as cheerio from 'cheerio'
+
+let paginas: Record<string, any>[];
+
+//é horrível de recuperar info de título/descrição de .astro, tentar usar
+//só md e instanciar .astro como componente daqui em diante
+try {paginas = await Astro.glob('/src/pages/*.{md,astro}');
+}catch (e){paginas = [];}
+
+const htmls = import.meta.glob('/src/pages/*.html');
+for (const path in htmls) {
+	var filename = Path.dirname(new URL(import.meta.url).pathname).substring(3);
+	var text = await fs.readFile(filename+'/'+(path.substring(11)), 'utf-8')
+	var doc = cheerio.load(text)
 	
+	paginas.push(
+		{"url": path.substring(11),
+		"frontmatter": {
+			"title":doc('title').text(),
+			"description":doc('meta[name="about"]').attr('content')}
+		}
+	)
 }
 ---
 
 <Layout title="Oie">
 	<main>
-		<h1>Agora com Astro.</h1>
-		<h2>E uma <span class="text-gradient">preguiça</span> grande demais para montar um index</h2>
+		<h1>finalmente com Astro.</h1>
+		<h2>E uma <span class="text-gradient">preguiça</span> grande demais para montar um index.</h2>
+		<p>só pra atualizar o repo já foi demorado</p>
 		<p class="instructions">
-			Aqui eu pretendo listar o <code>src/pages</code> de algum jeito.<br />
-			<strong>Code Challenge:</strong> Entender como faço isso sem .glob() ou getStaticPaths().
+			Aqui eu pretendo listar os arquivos do <code>src/pages</code> de algum jeito.<br />
+			<strong>Code Challenge:</strong> saber como arrancar valor de um .astro vindo de glob() durante a build
 		</p>
 		<ul role="list" class="link-card-grid">
-			<Card
-				href="fourierExemplo.html"
-				title="Exemplo fourier"
-				body="Plot interativo de uma série de Fourier de um degrau."
-			/>
 			<Card
 				href="./"
 				title="Index"
@@ -34,11 +48,10 @@ for (const path in maracujá) {
 				pagina => 
 					<Card
 						href={pagina.url}
-						title={pagina.name}
-						body={pagina.path}
+						title={pagina.frontmatter.title}
+						body={pagina.frontmatter.description}
 					/>
 			)
-
 			}
 			
 
@@ -50,7 +63,7 @@ for (const path in maracujá) {
 	main {
 		margin: auto;
 		padding: 1.5rem;
-		max-width: 60ch;
+		max-width: 60%;
 	}
 	h1 {
 		font-size: 3rem;

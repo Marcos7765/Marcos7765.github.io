@@ -1,0 +1,75 @@
+<head>
+    <title>teste tabela</title>
+    <meta name="about" content="rascunho google sheets/db"/>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" defer>
+      google.charts.load('current', {packages: ['charteditor']});   // Don't need to specify chart libraries!
+      /*
+      google.charts.setOnLoadCallback(drawVisualization);
+      function drawVisualization() {
+        google.visualization.drawChart({
+         "containerId": "visualization_div",
+         "dataSourceUrl": "https://docs.google.com/spreadsheets/d/1ozLyIjg4n-CqgzIv4tHcDHe5jUA1qYYCqkcXbEq_WQE/edit?usp=sharing",
+         "query":"SELECT A,avg(C) GROUP BY A",
+         "refreshInterval": 5,
+         "chartType": "Table",
+         "options": {
+            "alternatingRowStyle": true,
+            "showRowNumber" : true
+         }
+       });
+      }*/
+      
+        google.charts.setOnLoadCallback(loadEditor);
+        var chartEditor = null;
+
+        function loadEditor() {
+        // Create the chart to edit.
+        var wrapper = new google.visualization.ChartWrapper({
+            "containerId": "visualization_div",
+            "chartType": "Table",
+            "dataSourceUrl": "https://docs.google.com/spreadsheets/d/1ozLyIjg4n-CqgzIv4tHcDHe5jUA1qYYCqkcXbEq_WQE/edit?usp=sharing",
+            "query":"SELECT * WHERE A = 'Botafogo'",
+            "refreshInterval": 0,
+            "options": {
+                "alternatingRowStyle": true,
+                "showRowNumber" : true
+            }
+        });
+
+        chartEditor = new google.visualization.ChartEditor();
+        google.visualization.events.addListener(chartEditor, 'ok', redrawChart);
+        chartEditor.openDialog(wrapper, {});
+        
+        document.getElementById('editar').onclick = ()=> {
+            chartEditor.openDialog(wrapper, {});
+        };
+
+        document.getElementById('inpute').onchange = (evento) => {
+            console.log("oie do inpute " + evento.target.value);
+            wrapper.setQuery(evento.target.value);
+            wrapper.draw(document.getElementById("visualization_div"))
+        };
+        }
+
+        // On "OK" save the chart to a <div> on the page.
+        function redrawChart(){
+        chartEditor.getChartWrapper().draw(document.getElementById("visualization_div"));
+        }
+
+
+        function search(query){
+            var querya = google.visualization.Query("https://docs.google.com/spreadsheets/d/1ozLyIjg4n-CqgzIv4tHcDHe5jUA1qYYCqkcXbEq_WQE/edit?usp=sharing");
+            querya.setQuery(query)
+        }
+    </script>
+  </head>
+  <body style="font-family: Arial;border: 0 none;">
+    <div id="visualization_div" style="width: 600px; height: 400px;"></div>
+    <button id="editar">Editar</button>
+    <div id="query">
+        <label>Query</label><br>
+        <input id="inpute" type="text"/>
+    </div>
+    <div id="vazio"></div>
+  </body>
