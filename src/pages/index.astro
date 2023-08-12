@@ -15,16 +15,18 @@ try {paginas = await Astro.glob('/src/pages/*.{md,astro}');
 const htmls = import.meta.glob('/src/pages/*.html');
 for (const path in htmls) {
 	var filename = Path.dirname(new URL(import.meta.url).pathname).substring(3);
-	var text = await fs.readFile(filename+'/'+(path.substring(11)), 'utf-8')
-	var doc = cheerio.load(text)
+	//var filename = Path.dirname(new URL(Astro.url).pathname).substring(3);
+	//var text = await fs.readFile(filename+'/'+(path.substring(11)), 'utf-8')
+	var text = await fs.readFile("."+path, 'utf-8')
+	//var doc = cheerio.load(text)
 	
-	paginas.push(
-		{"url": path.substring(11),
-		"frontmatter": {
-			"title":doc('title').text(),
-			"description":doc('meta[name="about"]').attr('content')}
-		}
-	)
+	//paginas.push(
+		//{"url": path.substring(11),
+		//"frontmatter": {
+			//"title":doc('title').text(),
+			//"description":doc('meta[name="about"]').attr('content')}
+		//}
+	//)
 }
 ---
 
